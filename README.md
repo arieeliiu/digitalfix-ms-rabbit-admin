@@ -1,0 +1,1 @@
+# digitalfix-ms-rabbit-admin
