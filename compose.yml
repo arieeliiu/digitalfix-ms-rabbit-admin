@@ -1,0 +1,25 @@
+name: digitalfix-rabbit-admin
+services:
+  rabbit-admin:
+    build: .
+    restart: unless-stopped
+    environment:
+      RABBITMQ_ADDRESSES: ${RABBITMQ_ADDRESSES:-rabbitmq1:5672,rabbitmq2:5672}
+      RABBITMQ_VHOST: digitalfix
+      RABBITMQ_USERNAME: ${RABBITMQ_USERNAME:?Configura el usuario propio de Rabbit Admin}
+      RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:?Configura su contraseña}
+      ENTRA_ISSUER: ${ENTRA_ISSUER:?Configura el issuer de Entra ID}
+      ENTRA_AUDIENCE: ${ENTRA_AUDIENCE:?Configura la audiencia de la API}
+    ports:
+      - "127.0.0.1:8085:8085"
+    networks:
+      - messaging
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+networks:
+  messaging:
+    external: true
+    name: digitalfix-messaging
